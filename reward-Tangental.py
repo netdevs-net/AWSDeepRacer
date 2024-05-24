@@ -64,37 +64,50 @@ def reward_function(params):
 
     # It calculates the direction of the center line between the two closest waypoints using math.atan2 and converts it to degrees.
     # Calculate the direction in radius, arctan2(dy, dx), the result is (-pi, pi) in radians
-    track_direction = math.atan2(next_point[1] - prev_point[1], next_point[0] - prev_point[0]) 
-    # Convert to degreex
+    track_direction = math.atan2(next_point[1] - prev_point[1], next_point[0] - prev_point[0])  
+    # Convert to degrees
     track_direction = math.degrees(track_direction)
 
-    #  ----- ADD CODE HERE
-    # Calculate the track direction for every step around the track. 
-    # Store all these values in an array, and output the values to the screen. 
 
-    # If the average absolute difference of the radians is less than a set value, then accelerate the car towards max acceleration. 
-    # If there is a significant difference in radians, within 3 waypoints, then slow the car down to prepare for the turn 
-    # Create an expression here for slowing down for average absolute difference, focused on max_speed_reward and highest min_speed_reward
-    #  ----- END ADD CODE HERE
- 
-   
+    # Initialize variables
+    all_track_directions = []  # List to store track directions for all steps
+    window_size = 3  # Number of waypoints to consider for average difference
+    slow_down_threshold = 0.5  # Threshold for slowing down based on average difference
+
+    # Loop through waypoints to calculate track directions for the entire track
+    for i in range(len(params['waypoints']) - 1):
+        next_point = params['waypoints'][i + 1]
+        prev_point = params['waypoints'][i]
+        direction = math.degrees(math.atan2(next_point[1] - prev_point[1], next_point[0] - prev_point[0]))
+        all_track_directions.append(direction)
+
+    # Calculate average absolute difference of radians within a window
+    # ---- There is an error here, and the code does not validate, please fix
+    average_diff = 0
+    for i in range(len(all_track_directions) - window_size):
+        window_diff = sum(abs(all_track_directions[i + j] - all_track_directions[i + j - 1]) 
+                         for j in range(1, window_size)) / (window_size - 1)
+        average_diff += window_diff
+
+    average_diff /= (len(all_track_directions) - window_size)  # Normalize by number of windows
+
+    # Adjust speed based on average difference
+    adjusted_speed_reward = speed_reward
+    if average_diff > slow_down_threshold:
+    # Slow down for significant difference
+        adjusted_speed_reward *= 0.5  # Adjust based on your desired slowdown factor
 
     # It calculates the difference between the car's heading (params['heading']) and the track direction.
-    # Calculate the difference between the track direction and the heading direction of the car
     direction_diff = abs(track_direction - params['heading'])
     if direction_diff > 180:
         direction_diff = 360 - direction_diff
 
     abs_heading_reward = 1 - (direction_diff / 180.0)
     heading_reward = abs_heading_reward * heading_weight
-    
-    # - - - - -
+
     # Reward if steering angle is aligned with direction difference
     # It penalizes larger differences between the car's direction and the track direction.
     abs_steering_reward = 1 - (abs(params['steering_angle'] - direction_diff) / 180.0)
     steering_reward = abs_steering_reward * steering_weight
-    # Higher alignment gets a higher reward.    
-    # - - - - -
     
-    return speed_reward + heading_reward + steering_reward
-
+    return adjusted_speed_reward + heading_reward + steering_reward
