@@ -27,8 +27,7 @@ Setup a free account at AWS DeepRacer.
 
 ## Authors
 
-Ryan Iguchi, NetDevs.net
-ex. [@netdevs-net](https://netdevs.net)
+Ryan Iguchi, [NetDevs.net](https://netdevs.net)
 
 ## Version History
 
