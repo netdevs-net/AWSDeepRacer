@@ -1,6 +1,6 @@
 def reward_function(params):
     '''
-    Example of rewarding the agent to stay inside the two borders of the track
+    Rewarding the agent to stay inside the two borders of the track
     '''
     
     # Read input parameters

@@ -1,6 +1,6 @@
 def reward_function(params):
     '''
-    Example of penalize steering, which helps mitigate zig-zag behaviors
+    Penalize steering, which helps mitigate zig-zag behaviors
     '''
 
     # Read input parameters

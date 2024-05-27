@@ -78,6 +78,7 @@ def reward_function(params):
         math.degrees(math.atan2(waypoints[i + 1][1] - waypoints[i][1], waypoints[i + 1][0] - waypoints[i][0]))
         for i in range(len(waypoints) - 1)
     ]
+    # This is not correct. 
     avg_diff = sum(
         sum(abs(all_track_directions[i + j] - all_track_directions[i + j - 1]) for j in range(1, WINDOW_SIZE)) / (WINDOW_SIZE - 1)
         for i in range(len(all_track_directions) - WINDOW_SIZE)
