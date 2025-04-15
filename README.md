@@ -1,6 +1,6 @@
 # AWS DeepRacer
 
-AI Training with Python programming for reinforcement learning with Rewards
+AI Training with Python programming for reinforcement learning with Rewards. I wrote this at the AWS Los Angeles event in May 2024. Then I wrote a few move version over the next few days. Ended up with 2nd place of 24 teams/individuals. 
 
 ## Description
 
